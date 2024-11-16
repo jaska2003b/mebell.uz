@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ro'yxatdan o'tgan foydalanuvchilar</title>
+    <link rel="stylesheet" href="css/style1.css">
+</head>
+<body>
+
+<div class="admin-panel">
+    <header>
+        <h1>Ro'yxatdan o'tgan foydalanuvchilar</h1>
+        <nav>
+            <a href="admin_panel.php">Admin Panelga qaytish</a>
+        </nav>
+    </header>
+
+    <section>
+        <h2>Foydalanuvchilar ro'yxati</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Ism</th>
+                    <th>Familiya</th>
+                    <th>Email</th>
+                    <th>Manzil</th>
+                    <th>Telefon</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                // Ma'lumotlar bazasiga ulanish
+                $link = new mysqli("localhost", "root", "", "Foydalanuvchi");
+
+                if ($link->connect_errno) {
+                    echo "<tr><td colspan='6'>MB ga ulanishda xatolik: " . $link->connect_error . "</td></tr>";
+                    exit;
+                }
+
+                // Foydalanuvchilarni olish
+                $query = "SELECT id, ism, fam, pochta, manzil, tel FROM axborot";
+                $result = $link->query($query);
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>
+                                <td>" . $row['id'] . "</td>
+                                <td>" . $row['ism'] . "</td>
+                                <td>" . $row['fam'] . "</td>
+                                <td>" . $row['pochta'] . "</td>
+                                <td>" . $row['manzil'] . "</td>
+                                <td>" . $row['tel'] . "</td>
+                              </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='6'>Foydalanuvchilar yo'q</td></tr>";
+                }
+                $link->close();
+                ?>
+            </tbody>
+        </table>
+    </section>
+</div>
+
+</body>
+</html>
